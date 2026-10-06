@@ -1,5 +1,15 @@
 def parse_record(line: str) -> dict:
-    city, temp, date = line.split(";")
+    parts = line.split(";")
+    if len(parts) != 3:
+        raise ValueError("ожидалось 3 поля")
+
+    city, temp, date = parts
+    city = city.strip()
+    date = date.strip()
+
+    if not city or not date:
+        raise ValueError("город или дата пустые")
+
     return {"city": city, "temperature": float(temp), "date": date}
 
 
