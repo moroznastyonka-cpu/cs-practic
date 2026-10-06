@@ -5,14 +5,18 @@ def parse_record(line: str) -> dict:
 
     city, temp, date = parts
     city = city.strip()
+    temp = temp.strip()
     date = date.strip()
 
     if not city or not date:
         raise ValueError("город или дата пустые")
 
-    return {"city": city, "temperature": float(temp), "date": date}
+    try:
+        temperature = float(temp)
+    except ValueError:
+        raise ValueError("температура не число")
 
-
+    return {"city": city, "temperature": temperature, "date": date}
 def read_valid(lines: list[str]) -> list[dict]:
     return [parse_record(line) for line in lines]
 
