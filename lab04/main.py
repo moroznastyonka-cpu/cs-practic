@@ -1,7 +1,19 @@
 """Читает журнал метеостанции и печатает отчёт."""
 import sys
 
-from stats import average_by_city, read_valid, warmest_city
+from stats import average_by_city, parse_record, read_valid, warmest_city
+
+
+def count_skipped(lines: list[str]) -> int:
+    skipped = 0
+    for line in lines:
+        if not line.strip():
+            continue
+        try:
+            parse_record(line)
+        except ValueError:
+            skipped += 1
+    return skipped
 
 
 def main():
@@ -11,7 +23,7 @@ def main():
     best = warmest_city(records)
 
     print(len(records))
-    print(0)
+    print(count_skipped(lines))
     print(f"{averages[best]:.1f}" if best else "0.0")
 
 
