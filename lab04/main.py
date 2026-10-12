@@ -1,10 +1,12 @@
-"""Читает журнал метеостанции и печатает отчёт."""
 import sys
+from stats import average_by_city, read_valid, warmest_city, parse_record
 
-from stats import average_by_city, parse_record, read_valid, warmest_city
 
+def main():
+    lines = sys.stdin.read().splitlines()
 
-def count_skipped(lines: list[str]) -> int:
+    records = read_valid(lines)
+
     skipped = 0
     for line in lines:
         if not line.strip():
@@ -13,18 +15,13 @@ def count_skipped(lines: list[str]) -> int:
             parse_record(line)
         except ValueError:
             skipped += 1
-    return skipped
 
-
-def main():
-    lines = sys.stdin.read().splitlines()
-    records = read_valid(lines)
     averages = average_by_city(records)
     best = warmest_city(records)
 
     print(len(records))
-    print(count_skipped(lines))
-    print(f"{averages[best]:.1f}" if best else "0.0")
+    print(skipped)
+    print(f"{averages[best]:.1f}")
 
 
 if __name__ == "__main__":
