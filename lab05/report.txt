@@ -1,6 +1,6 @@
 Отчёт по журналу
 
-BROKEN: 6
+BROKEN: 2
 ERROR: 7
 INFO: 11
 WARNING: 5

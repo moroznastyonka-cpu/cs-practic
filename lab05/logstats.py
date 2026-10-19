@@ -2,14 +2,14 @@ def parse_event(line):
     parts = line.strip().split(maxsplit=2)
 
     if len(parts) != 3:
-        raise ValueError("Неверный формат строки")
+        raise ValueError("Некорректная строка")
 
     timestamp, level, message = parts
 
-    valid_levels = {"INFO", "ERROR", "WARNING"}
+    valid_levels = {"DEBUG", "INFO", "WARNING", "ERROR"}
 
-    if level not in valid_levels:
-        raise ValueError("Неизвестный уровень")
+    if level not in valid_levels or not message:
+        raise ValueError("Некорректная строка")
 
     return {
         "time": timestamp,
@@ -20,11 +20,11 @@ def parse_event(line):
 
 def count_levels(lines):
     counts = {
-    "INFO": 0,
-    "ERROR": 0,
-    "BROKEN": 0,
-    "WARNING": 0,
-}
+        "INFO": 0,
+        "ERROR": 0,
+        "BROKEN": 0,
+        "WARNING": 0,
+    }
 
     for line in lines:
         if not line.strip():
@@ -35,13 +35,14 @@ def count_levels(lines):
         except ValueError:
             counts["BROKEN"] += 1
         else:
-            counts[event["level"]] += 1
+            if event["level"] in counts:
+                counts[event["level"]] += 1
 
     return counts
 
 
-def top_errors(lines, n):
-    messages = {}
+def top_errors(lines, limit):
+    errors = {}
 
     for line in lines:
         if not line.strip():
@@ -54,14 +55,12 @@ def top_errors(lines, n):
 
         if event["level"] == "ERROR":
             message = event["message"]
-            messages[message] = messages.get(message, 0) + 1
+            errors[message] = errors.get(message, 0) + 1
 
-    sorted_messages = sorted(
-        messages.items(),
-        key=lambda item: (-item[1], item[0]),
-    )
+    result = list(errors.items())
+    result.sort(key=lambda item: (-item[1], item[0]))
 
-    return [[message, count] for message, count in sorted_messages[:n]]
+    return result[:limit]
 
 
 def format_report(counts, errors):
