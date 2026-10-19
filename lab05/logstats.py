@@ -39,3 +39,30 @@ def count_levels(lines):
             counts[event["level"]] += 1
 
     return counts
+
+
+
+
+
+
+
+def top_errors(lines, limit):
+    errors = {}
+
+    for line in lines:
+        if not line.strip():
+            continue
+
+        try:
+            event = parse_event(line)
+        except ValueError:
+            continue
+
+        if event["level"] == "ERROR":
+            message = event["message"]
+            errors[message] = errors.get(message, 0) + 1
+
+    result = list(errors.items())
+    result.sort(key=lambda item: (-item[1], item[0]))
+
+    return result[:limit]
