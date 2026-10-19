@@ -66,3 +66,22 @@ def top_errors(lines, limit):
     result.sort(key=lambda item: (-item[1], item[0]))
 
     return result[:limit]
+
+
+
+
+
+
+
+def format_report(counts, errors):
+    lines = ["Отчёт по журналу"]
+
+    for level in sorted(counts):
+        lines.append(f"{level}: {counts[level]}")
+
+    lines.append("Частые ошибки:")
+
+    for message, count in errors:
+        lines.append(f"- {message} — {count}")
+
+    return "\n".join(lines) + "\n"
