@@ -6,7 +6,7 @@ def parse_event(line):
 
     timestamp, level, message = parts
 
-    valid_levels = {"DEBUG", "INFO", "WARNING", "ERROR"}
+    valid_levels = {"INFO", "ERROR", "WARNING"}
 
     if level not in valid_levels:
         raise ValueError("Неизвестный уровень")
@@ -20,12 +20,11 @@ def parse_event(line):
 
 def count_levels(lines):
     counts = {
-        "BROKEN": 0,
-        "DEBUG": 0,
-        "ERROR": 0,
-        "INFO": 0,
-        "WARNING": 0,
-    }
+    "INFO": 0,
+    "ERROR": 0,
+    "BROKEN": 0,
+    "WARNING": 0,
+}
 
     for line in lines:
         if not line.strip():

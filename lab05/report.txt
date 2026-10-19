@@ -1,7 +1,6 @@
 Отчёт по журналу
 
-BROKEN: 2
-DEBUG: 4
+BROKEN: 6
 ERROR: 7
 INFO: 11
 WARNING: 5
