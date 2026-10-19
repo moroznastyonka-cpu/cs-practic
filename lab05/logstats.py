@@ -1,5 +1,5 @@
 def parse_event(line):
-    parts = line.strip().split(" | ", 2)
+    parts = line.strip().split(maxsplit=2)
 
     if len(parts) != 3:
         raise ValueError("Неверный формат строки")
@@ -12,7 +12,7 @@ def parse_event(line):
         raise ValueError("Неизвестный уровень")
 
     return {
-        "timestamp": timestamp,
+        "time": timestamp,
         "level": level,
         "message": message,
     }
@@ -20,11 +20,11 @@ def parse_event(line):
 
 def count_levels(lines):
     counts = {
+        "BROKEN": 0,
         "DEBUG": 0,
+        "ERROR": 0,
         "INFO": 0,
         "WARNING": 0,
-        "ERROR": 0,
-        "BROKEN": 0,
     }
 
     for line in lines:
@@ -41,13 +41,8 @@ def count_levels(lines):
     return counts
 
 
-
-
-
-
-
-def top_errors(lines, limit):
-    errors = {}
+def top_errors(lines, n):
+    messages = {}
 
     for line in lines:
         if not line.strip():
@@ -60,26 +55,29 @@ def top_errors(lines, limit):
 
         if event["level"] == "ERROR":
             message = event["message"]
-            errors[message] = errors.get(message, 0) + 1
+            messages[message] = messages.get(message, 0) + 1
 
-    result = list(errors.items())
-    result.sort(key=lambda item: (-item[1], item[0]))
+    sorted_messages = sorted(
+        messages.items(),
+        key=lambda item: (-item[1], item[0]),
+    )
 
-    return result[:limit]
-
-
-
-
-
+    return [[message, count] for message, count in sorted_messages[:n]]
 
 
 def format_report(counts, errors):
-    lines = ["Отчёт по журналу"]
+    lines = [
+        "Отчёт по журналу",
+        "",
+    ]
 
     for level in sorted(counts):
         lines.append(f"{level}: {counts[level]}")
 
-    lines.append("Частые ошибки:")
+    lines.extend([
+        "",
+        "Частые ошибки:",
+    ])
 
     for message, count in errors:
         lines.append(f"- {message} — {count}")

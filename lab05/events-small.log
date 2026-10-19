@@ -1,4 +1,4 @@
-2026-10-13 10:00:00 | INFO | Server started
-2026-10-13 10:01:00 | ERROR | Database unavailable
-2026-10-13 10:02:00 | ERROR | Database unavailable
-2026-10-13 10:03:00 | WARNING | High memory usage
+2026-03-02T10:00:00 INFO Короткий запуск
+2026-03-02T10:00:30 ERROR Нет доступа к каталогу /var/log
+2026-03-02T10:01:00 ERROR Нет доступа к каталогу /var/log
+2026-03-02T10:02:00 WARNING Диск заполнен на 91%
