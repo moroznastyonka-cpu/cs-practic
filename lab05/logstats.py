@@ -34,9 +34,10 @@ def count_levels(lines):
             event = parse_event(line)
         except ValueError:
             counts["BROKEN"] += 1
-        else:
-            if event["level"] in counts:
-                counts[event["level"]] += 1
+            continue
+
+        if event["level"] in counts:
+            counts[event["level"]] += 1
 
     return counts
 
@@ -57,10 +58,12 @@ def top_errors(lines, limit):
             message = event["message"]
             errors[message] = errors.get(message, 0) + 1
 
-    result = list(errors.items())
-    result.sort(key=lambda item: (-item[1], item[0]))
+    sorted_errors = sorted(
+        errors.items(),
+        key=lambda item: (-item[1], item[0]),
+    )
 
-    return result[:limit]
+    return sorted_errors[:limit]
 
 
 def format_report(counts, errors):
